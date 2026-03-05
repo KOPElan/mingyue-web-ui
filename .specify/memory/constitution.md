@@ -1,50 +1,68 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
 
-## Core Principles
+# mingyue-web-ui 宪章
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+## 核心原则
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### I. API 驱动
+所有功能均通过调用后端 mingyue-go 提供的 API 实现，前端不直接处理业务逻辑。
+**理由**：确保前后端解耦，便于后端独立演进和安全管控。
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### II. 可视化与用户体验优先
+界面设计需美观、直观，操作流程清晰，交互友好，适配主流浏览器。
+**理由**：提升用户满意度，降低学习和使用门槛。
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### III. 测试优先（强制）
+所有核心功能必须具备自动化测试，覆盖主要交互和 API 调用。
+**理由**：保障产品质量，防止回归，便于持续集成。
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### IV. 接口契约与兼容性
+前端与后端接口需严格遵循 API 文档，变更需评估兼容性并同步更新文档。
+**理由**：减少前后端协作摩擦，保障系统稳定。
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+
+### V. 开源合规与社区友好
+遵循 GPLv3 协议，所有贡献需明确版权归属，文档与讨论优先中文，兼容英文。
+**理由**：保障开源合规，促进社区协作。
+
+
+## 附加约束
+
+- 技术栈建议：前端推荐使用 Vue/React 等主流框架，UI 组件库需支持国际化。
+- 安全要求：前端不存储敏感信息，所有 API 调用需支持鉴权。
+- 性能标准：页面加载时间 < 2s，交互响应 < 200ms。
+
+
+## 开发流程与质量门槛
+
+- 所有变更需经代码评审，重点关注 UI/UX、API 合规性与测试覆盖。
+- 合并前必须通过自动化测试。
+- 重大变更需同步更新用户文档与接口说明。
+
+
+## 治理与修订
+
+- 本宪章优先于其他开发惯例，所有开发、评审、验收均需遵循。
+- 宪章修订需经项目维护者讨论并记录修订历史。
+- 版本号采用 MAJOR.MINOR.PATCH 语义化管理：
+	- MAJOR：原则变更或删除，导致治理方式不兼容
+	- MINOR：新增原则或扩展治理细则
+	- PATCH：措辞澄清、错别字修正、非实质性调整
+- 每次修订需更新修订日期与版本号。
+
+
+**Version**: 1.0.0 | **Ratified**: 2026-03-05 | **Last Amended**: 2026-03-05
+
+<!--
+Sync Impact Report
+- 版本：首次发布 1.0.0
+- 新增原则：API 驱动、可视化与用户体验优先、测试优先、接口契约与兼容性、开源合规与社区友好
+- 新增附加约束、开发流程与质量门槛、治理与修订等章节
+- 相关模板（plan/spec/tasks）已兼容独立测试、API 合规、UI/UX 关注点，无需调整
+- 无遗留占位符
+-->
