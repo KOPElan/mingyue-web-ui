@@ -1,5 +1,8 @@
 <template>
-  <el-config-provider :locale="elLocale" :size="'default'">
+  <el-config-provider
+    :locale="elLocale"
+    :size="'default'"
+  >
     <div :class="['app-wrapper', themeClass]">
       <router-view />
     </div>
@@ -7,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, watch } from 'vue'
+  import { computed } from 'vue'
   import type { Language } from 'element-plus/es/locale'
   import zhCn from 'element-plus/es/locale/lang/zh-cn'
   import en from 'element-plus/es/locale/lang/en'
@@ -15,6 +18,7 @@
 
   const uiStore = useUiStore()
 
+  // ui store already applies theme class to document.documentElement via its own watcher
   const elLocale = computed((): Language => {
     return (uiStore.language === 'zh-CN' ? zhCn : en) as unknown as Language
   })
@@ -26,24 +30,6 @@
     }
     return theme
   })
-
-  watch(
-    () => uiStore.theme,
-    (newTheme) => {
-      const resolved =
-        newTheme === 'auto'
-          ? window.matchMedia('(prefers-color-scheme: dark)').matches
-            ? 'dark'
-            : 'light'
-          : newTheme
-      if (resolved === 'dark') {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
-    },
-    { immediate: true }
-  )
 </script>
 
 <style>

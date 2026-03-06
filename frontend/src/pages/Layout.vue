@@ -1,10 +1,21 @@
 <template>
   <el-container class="layout-container">
     <!-- Sidebar -->
-    <el-aside :width="isCollapsed ? '64px' : '220px'" class="sidebar">
+    <el-aside
+      :width="isCollapsed ? '64px' : '220px'"
+      class="sidebar"
+    >
       <div class="sidebar-header">
-        <el-icon size="28" color="#409eff"><Moon /></el-icon>
-        <span v-if="!isCollapsed" class="brand-name">明月管理</span>
+        <el-icon
+          size="28"
+          color="#409eff"
+        >
+          <Moon />
+        </el-icon>
+        <span
+          v-if="!isCollapsed"
+          class="brand-name"
+        >明月管理</span>
       </div>
 
       <el-menu
@@ -16,35 +27,51 @@
       >
         <el-menu-item index="/dashboard">
           <el-icon><Odometer /></el-icon>
-          <template #title>{{ $t('nav.dashboard') }}</template>
+          <template #title>
+            {{ $t('nav.dashboard') }}
+          </template>
         </el-menu-item>
         <el-menu-item index="/agents">
           <el-icon><Connection /></el-icon>
-          <template #title>{{ $t('nav.agents') }}</template>
+          <template #title>
+            {{ $t('nav.agents') }}
+          </template>
         </el-menu-item>
         <el-menu-item index="/system">
           <el-icon><Monitor /></el-icon>
-          <template #title>{{ $t('nav.system') }}</template>
+          <template #title>
+            {{ $t('nav.system') }}
+          </template>
         </el-menu-item>
         <el-menu-item index="/processes">
           <el-icon><Cpu /></el-icon>
-          <template #title>{{ $t('nav.processes') }}</template>
+          <template #title>
+            {{ $t('nav.processes') }}
+          </template>
         </el-menu-item>
         <el-menu-item index="/disks">
           <el-icon><HardDisk /></el-icon>
-          <template #title>{{ $t('nav.disks') }}</template>
+          <template #title>
+            {{ $t('nav.disks') }}
+          </template>
         </el-menu-item>
         <el-menu-item index="/files">
           <el-icon><FolderOpened /></el-icon>
-          <template #title>{{ $t('nav.files') }}</template>
+          <template #title>
+            {{ $t('nav.files') }}
+          </template>
         </el-menu-item>
         <el-menu-item index="/shares">
           <el-icon><Share /></el-icon>
-          <template #title>{{ $t('nav.shares') }}</template>
+          <template #title>
+            {{ $t('nav.shares') }}
+          </template>
         </el-menu-item>
         <el-menu-item index="/network">
           <el-icon><SetUp /></el-icon>
-          <template #title>{{ $t('nav.network') }}</template>
+          <template #title>
+            {{ $t('nav.network') }}
+          </template>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -54,8 +81,13 @@
       <!-- Header -->
       <el-header class="header">
         <div class="header-left">
-          <el-button text @click="toggleSidebar">
-            <el-icon size="20"><Fold v-if="!isCollapsed" /><Expand v-else /></el-icon>
+          <el-button
+            text
+            @click="toggleSidebar"
+          >
+            <el-icon size="20">
+              <Fold v-if="!isCollapsed" /><Expand v-else />
+            </el-icon>
           </el-button>
         </div>
 
@@ -66,7 +98,10 @@
 
           <el-dropdown @command="handleCommand">
             <div class="user-info">
-              <el-avatar size="small" :icon="UserFilled" />
+              <el-avatar
+                size="small"
+                :icon="UserFilled"
+              />
               <span class="username">{{ sessionStore.userInfo?.displayName || 'User' }}</span>
             </div>
             <template #dropdown>

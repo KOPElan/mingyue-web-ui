@@ -2,32 +2,76 @@
   <div class="agent-manager">
     <div class="page-header">
       <h2>{{ $t('nav.agents') }}</h2>
-      <el-button type="primary" :icon="Plus" @click="openAddDialog">
+      <el-button
+        type="primary"
+        :icon="Plus"
+        @click="openAddDialog"
+      >
         {{ $t('agent.addAgent') }}
       </el-button>
     </div>
 
-    <el-table :data="agentStore.agents" v-loading="agentStore.loading" border stripe>
-      <el-table-column prop="id" :label="$t('agent.id')" width="140" />
-      <el-table-column prop="name" :label="$t('agent.name')" />
-      <el-table-column prop="address" :label="$t('agent.address')" />
-      <el-table-column prop="version" :label="$t('agent.version')" width="100" />
-      <el-table-column :label="$t('common.status')" width="100">
+    <el-table
+      v-loading="agentStore.loading"
+      :data="agentStore.agents"
+      border
+      stripe
+    >
+      <el-table-column
+        prop="id"
+        :label="$t('agent.id')"
+        width="140"
+      />
+      <el-table-column
+        prop="name"
+        :label="$t('agent.name')"
+      />
+      <el-table-column
+        prop="address"
+        :label="$t('agent.address')"
+      />
+      <el-table-column
+        prop="version"
+        :label="$t('agent.version')"
+        width="100"
+      />
+      <el-table-column
+        :label="$t('common.status')"
+        width="100"
+      >
         <template #default="{ row }">
-          <el-tag :type="row.status === 'online' ? 'success' : 'danger'" size="small">
+          <el-tag
+            :type="row.status === 'online' ? 'success' : 'danger'"
+            size="small"
+          >
             {{ row.status === 'online' ? $t('common.online') : $t('common.offline') }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('common.actions')" width="260" fixed="right">
+      <el-table-column
+        :label="$t('common.actions')"
+        width="260"
+        fixed="right"
+      >
         <template #default="{ row }">
-          <el-button size="small" @click="pingAgent(row)">
+          <el-button
+            size="small"
+            @click="pingAgent(row)"
+          >
             {{ $t('agent.testConnection') }}
           </el-button>
-          <el-button size="small" type="primary" @click="openEditDialog(row)">
+          <el-button
+            size="small"
+            type="primary"
+            @click="openEditDialog(row)"
+          >
             {{ $t('common.edit') }}
           </el-button>
-          <el-button size="small" type="danger" @click="confirmDelete(row)">
+          <el-button
+            size="small"
+            type="danger"
+            @click="confirmDelete(row)"
+          >
             {{ $t('common.delete') }}
           </el-button>
         </template>
@@ -40,15 +84,39 @@
       :title="editingAgent ? $t('agent.editAgent') : $t('agent.addAgent')"
       width="500px"
     >
-      <el-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <el-form-item :label="$t('agent.id')" prop="id" v-if="!editingAgent">
-          <el-input v-model="form.id" :placeholder="$t('agent.enterId')" />
+      <el-form
+        ref="formRef"
+        :model="form"
+        :rules="rules"
+        label-position="top"
+      >
+        <el-form-item
+          v-if="!editingAgent"
+          :label="$t('agent.id')"
+          prop="id"
+        >
+          <el-input
+            v-model="form.id"
+            :placeholder="$t('agent.enterId')"
+          />
         </el-form-item>
-        <el-form-item :label="$t('agent.name')" prop="name">
-          <el-input v-model="form.name" :placeholder="$t('agent.enterName')" />
+        <el-form-item
+          :label="$t('agent.name')"
+          prop="name"
+        >
+          <el-input
+            v-model="form.name"
+            :placeholder="$t('agent.enterName')"
+          />
         </el-form-item>
-        <el-form-item :label="$t('agent.address')" prop="address">
-          <el-input v-model="form.address" :placeholder="$t('agent.enterAddress')" />
+        <el-form-item
+          :label="$t('agent.address')"
+          prop="address"
+        >
+          <el-input
+            v-model="form.address"
+            :placeholder="$t('agent.enterAddress')"
+          />
         </el-form-item>
         <el-form-item :label="$t('agent.apiKey')">
           <el-input
@@ -60,8 +128,14 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="dialogVisible = false">{{ $t('common.cancel') }}</el-button>
-        <el-button type="primary" :loading="saving" @click="saveAgent">
+        <el-button @click="dialogVisible = false">
+          {{ $t('common.cancel') }}
+        </el-button>
+        <el-button
+          type="primary"
+          :loading="saving"
+          @click="saveAgent"
+        >
           {{ $t('common.save') }}
         </el-button>
       </template>

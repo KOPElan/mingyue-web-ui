@@ -3,10 +3,19 @@
     <div class="login-card">
       <div class="login-header">
         <div class="logo">
-          <el-icon size="48" color="#409eff"><Moon /></el-icon>
+          <el-icon
+            size="48"
+            color="#409eff"
+          >
+            <Moon />
+          </el-icon>
         </div>
-        <h1 class="title">{{ $t('auth.systemTitle') }}</h1>
-        <p class="subtitle">{{ $t('auth.welcomeBack') }}</p>
+        <h1 class="title">
+          {{ $t('auth.systemTitle') }}
+        </h1>
+        <p class="subtitle">
+          {{ $t('auth.welcomeBack') }}
+        </p>
       </div>
 
       <el-form
@@ -17,7 +26,10 @@
         class="login-form"
         @submit.prevent="handleLogin"
       >
-        <el-form-item :label="$t('auth.username')" prop="username">
+        <el-form-item
+          :label="$t('auth.username')"
+          prop="username"
+        >
           <el-input
             v-model="form.username"
             :placeholder="$t('auth.enterUsername')"
@@ -27,7 +39,10 @@
           />
         </el-form-item>
 
-        <el-form-item :label="$t('auth.password')" prop="password">
+        <el-form-item
+          :label="$t('auth.password')"
+          prop="password"
+        >
           <el-input
             v-model="form.password"
             type="password"

@@ -3,12 +3,32 @@
     <div class="page-header">
       <h2>{{ $t('nav.files') }}</h2>
       <div class="header-actions">
-        <el-button type="primary" :icon="Refresh" @click="loadFiles(currentPath)" :loading="loading">
+        <el-button
+          type="primary"
+          :icon="Refresh"
+          :loading="loading"
+          @click="loadFiles(currentPath)"
+        >
           {{ $t('common.refresh') }}
         </el-button>
-        <el-button :icon="Upload" @click="triggerUpload">{{ $t('file.uploadFile') }}</el-button>
-        <el-button :icon="FolderAdd" @click="showNewFolderDialog">{{ $t('file.newFolder') }}</el-button>
-        <input ref="fileInputRef" type="file" style="display:none" @change="handleFileUpload" />
+        <el-button
+          :icon="Upload"
+          @click="triggerUpload"
+        >
+          {{ $t('file.uploadFile') }}
+        </el-button>
+        <el-button
+          :icon="FolderAdd"
+          @click="showNewFolderDialog"
+        >
+          {{ $t('file.newFolder') }}
+        </el-button>
+        <input
+          ref="fileInputRef"
+          type="file"
+          style="display:none"
+          @change="handleFileUpload"
+        >
       </div>
     </div>
 
@@ -24,19 +44,30 @@
       <!-- Path navigation -->
       <div class="path-bar">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item @click="loadFiles('/')" class="clickable">{{ $t('file.path') }}</el-breadcrumb-item>
+          <el-breadcrumb-item
+            class="clickable"
+            @click="loadFiles('/')"
+          >
+            {{ $t('file.path') }}
+          </el-breadcrumb-item>
           <el-breadcrumb-item
             v-for="(part, idx) in pathParts"
             :key="idx"
-            @click="loadFiles(buildPath(idx))"
             class="clickable"
+            @click="loadFiles(buildPath(idx))"
           >
             {{ part }}
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
 
-      <el-table :data="files" v-loading="loading" border stripe @row-dblclick="onRowDoubleClick">
+      <el-table
+        v-loading="loading"
+        :data="files"
+        border
+        stripe
+        @row-dblclick="onRowDoubleClick"
+      >
         <el-table-column width="36">
           <template #default="{ row }">
             <el-icon>
@@ -45,29 +76,64 @@
             </el-icon>
           </template>
         </el-table-column>
-        <el-table-column prop="name" :label="$t('file.name')" min-width="200" />
-        <el-table-column :label="$t('file.type')" width="100">
+        <el-table-column
+          prop="name"
+          :label="$t('file.name')"
+          min-width="200"
+        />
+        <el-table-column
+          :label="$t('file.type')"
+          width="100"
+        >
           <template #default="{ row }">
-            <el-tag size="small" :type="row.is_dir ? 'success' : row.is_symlink ? 'warning' : 'info'">
+            <el-tag
+              size="small"
+              :type="row.is_dir ? 'success' : row.is_symlink ? 'warning' : 'info'"
+            >
               {{ row.is_dir ? $t('file.directory') : row.is_symlink ? $t('file.symlink') : $t('file.file') }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('file.size')" width="120">
+        <el-table-column
+          :label="$t('file.size')"
+          width="120"
+        >
           <template #default="{ row }">
             {{ row.is_dir ? '-' : formatBytes(row.size) }}
           </template>
         </el-table-column>
-        <el-table-column prop="mode" :label="$t('file.mode')" width="110" />
-        <el-table-column prop="mod_time" :label="$t('file.modTime')" width="180">
-          <template #default="{ row }">{{ new Date(row.mod_time).toLocaleString() }}</template>
-        </el-table-column>
-        <el-table-column :label="$t('common.actions')" width="150" fixed="right">
+        <el-table-column
+          prop="mode"
+          :label="$t('file.mode')"
+          width="110"
+        />
+        <el-table-column
+          prop="mod_time"
+          :label="$t('file.modTime')"
+          width="180"
+        >
           <template #default="{ row }">
-            <el-button v-if="!row.is_dir" size="small" @click="downloadFile(row)">
+            {{ new Date(row.mod_time).toLocaleString() }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('common.actions')"
+          width="150"
+          fixed="right"
+        >
+          <template #default="{ row }">
+            <el-button
+              v-if="!row.is_dir"
+              size="small"
+              @click="downloadFile(row)"
+            >
               {{ $t('common.download') }}
             </el-button>
-            <el-button size="small" type="danger" @click="confirmDelete(row)">
+            <el-button
+              size="small"
+              type="danger"
+              @click="confirmDelete(row)"
+            >
               {{ $t('common.delete') }}
             </el-button>
           </template>
@@ -76,11 +142,25 @@
     </template>
 
     <!-- New Folder Dialog -->
-    <el-dialog v-model="folderDialogVisible" :title="$t('file.newFolder')" width="400px">
-      <el-input v-model="newFolderName" :placeholder="$t('file.enterFolderName')" />
+    <el-dialog
+      v-model="folderDialogVisible"
+      :title="$t('file.newFolder')"
+      width="400px"
+    >
+      <el-input
+        v-model="newFolderName"
+        :placeholder="$t('file.enterFolderName')"
+      />
       <template #footer>
-        <el-button @click="folderDialogVisible = false">{{ $t('common.cancel') }}</el-button>
-        <el-button type="primary" @click="createFolder">{{ $t('common.confirm') }}</el-button>
+        <el-button @click="folderDialogVisible = false">
+          {{ $t('common.cancel') }}
+        </el-button>
+        <el-button
+          type="primary"
+          @click="createFolder"
+        >
+          {{ $t('common.confirm') }}
+        </el-button>
       </template>
     </el-dialog>
   </div>

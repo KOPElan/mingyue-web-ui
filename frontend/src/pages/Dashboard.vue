@@ -2,7 +2,12 @@
   <div class="dashboard">
     <div class="page-header">
       <h2>{{ $t('nav.dashboard') }}</h2>
-      <el-button type="primary" :icon="Refresh" @click="fetchData" :loading="loading">
+      <el-button
+        type="primary"
+        :icon="Refresh"
+        :loading="loading"
+        @click="fetchData"
+      >
         {{ $t('common.refresh') }}
       </el-button>
     </div>
@@ -18,18 +23,35 @@
 
     <template v-else>
       <!-- Overview Cards -->
-      <el-row :gutter="16" class="overview-cards">
-        <el-col :xs="24" :sm="8">
-          <el-card class="metric-card" shadow="hover">
+      <el-row
+        :gutter="16"
+        class="overview-cards"
+      >
+        <el-col
+          :xs="24"
+          :sm="8"
+        >
+          <el-card
+            class="metric-card"
+            shadow="hover"
+          >
             <div class="metric-content">
               <div class="metric-icon cpu">
-                <el-icon size="32"><Cpu /></el-icon>
+                <el-icon size="32">
+                  <Cpu />
+                </el-icon>
               </div>
               <div class="metric-info">
-                <div class="metric-label">{{ $t('system.cpu') }}</div>
+                <div class="metric-label">
+                  {{ $t('system.cpu') }}
+                </div>
                 <div class="metric-value">
                   <span v-if="overview">{{ overview.cpu_percent.toFixed(1) }}%</span>
-                  <el-skeleton-item v-else variant="text" style="width: 60px" />
+                  <el-skeleton-item
+                    v-else
+                    variant="text"
+                    style="width: 60px"
+                  />
                 </div>
                 <el-progress
                   v-if="overview"
@@ -43,19 +65,36 @@
           </el-card>
         </el-col>
 
-        <el-col :xs="24" :sm="8">
-          <el-card class="metric-card" shadow="hover">
+        <el-col
+          :xs="24"
+          :sm="8"
+        >
+          <el-card
+            class="metric-card"
+            shadow="hover"
+          >
             <div class="metric-content">
               <div class="metric-icon memory">
-                <el-icon size="32"><DataBoard /></el-icon>
+                <el-icon size="32">
+                  <DataBoard />
+                </el-icon>
               </div>
               <div class="metric-info">
-                <div class="metric-label">{{ $t('system.memory') }}</div>
+                <div class="metric-label">
+                  {{ $t('system.memory') }}
+                </div>
                 <div class="metric-value">
                   <span v-if="overview">{{ overview.mem_percent.toFixed(1) }}%</span>
-                  <el-skeleton-item v-else variant="text" style="width: 60px" />
+                  <el-skeleton-item
+                    v-else
+                    variant="text"
+                    style="width: 60px"
+                  />
                 </div>
-                <div v-if="overview" class="metric-sub">
+                <div
+                  v-if="overview"
+                  class="metric-sub"
+                >
                   {{ formatBytes(overview.mem_used) }} / {{ formatBytes(overview.mem_total) }}
                 </div>
                 <el-progress
@@ -70,19 +109,36 @@
           </el-card>
         </el-col>
 
-        <el-col :xs="24" :sm="8">
-          <el-card class="metric-card" shadow="hover">
+        <el-col
+          :xs="24"
+          :sm="8"
+        >
+          <el-card
+            class="metric-card"
+            shadow="hover"
+          >
             <div class="metric-content">
               <div class="metric-icon uptime">
-                <el-icon size="32"><Timer /></el-icon>
+                <el-icon size="32">
+                  <Timer />
+                </el-icon>
               </div>
               <div class="metric-info">
-                <div class="metric-label">{{ $t('system.uptime') }}</div>
+                <div class="metric-label">
+                  {{ $t('system.uptime') }}
+                </div>
                 <div class="metric-value">
                   <span v-if="overview">{{ formatUptime(overview.uptime) }}</span>
-                  <el-skeleton-item v-else variant="text" style="width: 100px" />
+                  <el-skeleton-item
+                    v-else
+                    variant="text"
+                    style="width: 100px"
+                  />
                 </div>
-                <div v-if="overview" class="metric-sub">
+                <div
+                  v-if="overview"
+                  class="metric-sub"
+                >
                   {{ $t('system.timestamp') }}: {{ formatTime(overview.timestamp) }}
                 </div>
               </div>
@@ -92,16 +148,28 @@
       </el-row>
 
       <!-- Quick links -->
-      <el-row :gutter="16" class="mt-16">
-        <el-col :xs="24" :sm="12" :md="6" v-for="item in quickLinks" :key="item.path">
+      <el-row
+        :gutter="16"
+        class="mt-16"
+      >
+        <el-col
+          v-for="item in quickLinks"
+          :key="item.path"
+          :xs="24"
+          :sm="12"
+          :md="6"
+        >
           <el-card
             class="quick-link-card"
             shadow="hover"
-            @click="$router.push(item.path)"
             style="cursor: pointer"
+            @click="$router.push(item.path)"
           >
             <div class="quick-link-content">
-              <el-icon size="24" :style="{ color: item.color }">
+              <el-icon
+                size="24"
+                :style="{ color: item.color }"
+              >
                 <component :is="item.icon" />
               </el-icon>
               <span>{{ $t(item.label) }}</span>
@@ -115,7 +183,7 @@
 
 <script setup lang="ts">
   import { ref, watch } from 'vue'
-  import { Refresh, Cpu, DataBoard, Timer, Monitor, FolderOpened, Share, SetUp } from '@element-plus/icons-vue'
+  import { Refresh, Cpu, DataBoard, Timer } from '@element-plus/icons-vue'
   import { useAgentStore } from '@/stores/agent'
   import agentApi from '@/api/agent'
   import type { SystemOverview } from '@/api/agent'

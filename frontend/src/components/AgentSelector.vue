@@ -3,8 +3,8 @@
     v-model="agentStore.currentAgentId"
     :placeholder="$t('agent.selectAgent')"
     style="width: 200px"
-    @change="handleChange"
     size="default"
+    @change="handleChange"
   >
     <el-option
       v-for="agent in agentStore.agents"

@@ -19,8 +19,28 @@ const agents = new Map();
 if (process.env.INITIAL_AGENTS) {
   try {
     const initialAgents = JSON.parse(process.env.INITIAL_AGENTS);
+    if (!Array.isArray(initialAgents)) {
+      throw new Error('INITIAL_AGENTS must be a JSON array');
+    }
     for (const agent of initialAgents) {
-      agents.set(agent.id, agent);
+      // Validate required fields before loading
+      if (
+        typeof agent.id === 'string' && agent.id.trim() &&
+        typeof agent.name === 'string' && agent.name.trim() &&
+        typeof agent.address === 'string' && agent.address.trim() &&
+        /^https?:\/\/.+/.test(agent.address.trim())
+      ) {
+        agents.set(agent.id, {
+          id: agent.id.trim(),
+          name: agent.name.trim(),
+          address: agent.address.trim(),
+          apiKey: typeof agent.apiKey === 'string' ? agent.apiKey : '',
+          status: agent.status === 'online' ? 'online' : 'offline',
+          version: typeof agent.version === 'string' ? agent.version : 'unknown'
+        });
+      } else {
+        console.warn('Skipping invalid agent entry (missing/invalid id, name, or address):', JSON.stringify({ id: agent.id, name: agent.name }));
+      }
     }
     console.log(`Loaded ${agents.size} agents from INITIAL_AGENTS`);
   } catch (e) {

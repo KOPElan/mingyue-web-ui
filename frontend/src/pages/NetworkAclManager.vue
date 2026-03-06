@@ -2,7 +2,12 @@
   <div class="network-acl-manager">
     <div class="page-header">
       <h2>{{ $t('nav.network') }}</h2>
-      <el-button type="primary" :icon="Refresh" @click="fetchData" :loading="loading">
+      <el-button
+        type="primary"
+        :icon="Refresh"
+        :loading="loading"
+        @click="fetchData"
+      >
         {{ $t('common.refresh') }}
       </el-button>
     </div>
@@ -17,9 +22,21 @@
 
     <template v-else>
       <!-- Network Interfaces -->
-      <h3 class="section-title">{{ $t('network.interfaces') }}</h3>
-      <el-table :data="interfaces" v-loading="loading" border stripe class="mb-24">
-        <el-table-column prop="ifname" :label="$t('network.ifname')" width="150" />
+      <h3 class="section-title">
+        {{ $t('network.interfaces') }}
+      </h3>
+      <el-table
+        v-loading="loading"
+        :data="interfaces"
+        border
+        stripe
+        class="mb-24"
+      >
+        <el-table-column
+          prop="ifname"
+          :label="$t('network.ifname')"
+          width="150"
+        />
         <el-table-column :label="$t('network.addresses')">
           <template #default="{ row }">
             <el-tag
@@ -27,14 +44,30 @@
               :key="addr"
               size="small"
               class="mr-4"
-            >{{ addr }}</el-tag>
+            >
+              {{ addr }}
+            </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="mac" :label="$t('network.mac')" width="160" />
-        <el-table-column prop="mtu" :label="$t('network.mtu')" width="80" />
-        <el-table-column :label="$t('network.state')" width="100">
+        <el-table-column
+          prop="mac"
+          :label="$t('network.mac')"
+          width="160"
+        />
+        <el-table-column
+          prop="mtu"
+          :label="$t('network.mtu')"
+          width="80"
+        />
+        <el-table-column
+          :label="$t('network.state')"
+          width="100"
+        >
           <template #default="{ row }">
-            <el-tag :type="row.state === 'up' ? 'success' : 'danger'" size="small">
+            <el-tag
+              :type="row.state === 'up' ? 'success' : 'danger'"
+              size="small"
+            >
               {{ row.state }}
             </el-tag>
           </template>
@@ -42,7 +75,9 @@
       </el-table>
 
       <!-- ACL Section -->
-      <h3 class="section-title">{{ $t('network.acl') }}</h3>
+      <h3 class="section-title">
+        {{ $t('network.acl') }}
+      </h3>
       <div class="acl-search">
         <el-input
           v-model="aclPath"
@@ -50,15 +85,31 @@
           style="width: 360px"
           @keyup.enter="fetchAcl"
         />
-        <el-button type="primary" @click="fetchAcl" :loading="aclLoading">
+        <el-button
+          type="primary"
+          :loading="aclLoading"
+          @click="fetchAcl"
+        >
           {{ $t('common.search') }}
         </el-button>
       </div>
 
-      <el-card v-if="aclData" class="mt-16">
-        <template #header>{{ $t('network.aclEntries') }}: {{ aclData.path }}</template>
-        <el-table :data="aclEntryRows" border stripe>
-          <el-table-column prop="entry" :label="$t('network.aclEntries')" />
+      <el-card
+        v-if="aclData"
+        class="mt-16"
+      >
+        <template #header>
+          {{ $t('network.aclEntries') }}: {{ aclData.path }}
+        </template>
+        <el-table
+          :data="aclEntryRows"
+          border
+          stripe
+        >
+          <el-table-column
+            prop="entry"
+            :label="$t('network.aclEntries')"
+          />
         </el-table>
       </el-card>
     </template>

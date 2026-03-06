@@ -2,7 +2,12 @@
   <div class="disk-manager">
     <div class="page-header">
       <h2>{{ $t('nav.disks') }}</h2>
-      <el-button type="primary" :icon="Refresh" @click="fetchData" :loading="loading">
+      <el-button
+        type="primary"
+        :icon="Refresh"
+        :loading="loading"
+        @click="fetchData"
+      >
         {{ $t('common.refresh') }}
       </el-button>
     </div>
@@ -17,18 +22,47 @@
 
     <template v-else>
       <!-- Disk Devices -->
-      <h3 class="section-title">{{ $t('disk.devices') }}</h3>
-      <el-table :data="disks" v-loading="loading" border stripe class="mb-16">
-        <el-table-column prop="name" :label="$t('common.name')" />
+      <h3 class="section-title">
+        {{ $t('disk.devices') }}
+      </h3>
+      <el-table
+        v-loading="loading"
+        :data="disks"
+        border
+        stripe
+        class="mb-16"
+      >
+        <el-table-column
+          prop="name"
+          :label="$t('common.name')"
+        />
         <el-table-column :label="$t('disk.size')">
-          <template #default="{ row }">{{ formatBytes(row.size_bytes) }}</template>
-        </el-table-column>
-        <el-table-column prop="type" :label="$t('disk.type')" width="100" />
-        <el-table-column prop="model" :label="$t('disk.model')" />
-        <el-table-column prop="mount_point" :label="$t('disk.mountPoint')" />
-        <el-table-column :label="$t('disk.removable')" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.removable ? 'warning' : 'info'" size="small">
+            {{ formatBytes(row.size_bytes) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="type"
+          :label="$t('disk.type')"
+          width="100"
+        />
+        <el-table-column
+          prop="model"
+          :label="$t('disk.model')"
+        />
+        <el-table-column
+          prop="mount_point"
+          :label="$t('disk.mountPoint')"
+        />
+        <el-table-column
+          :label="$t('disk.removable')"
+          width="100"
+        >
+          <template #default="{ row }">
+            <el-tag
+              :type="row.removable ? 'warning' : 'info'"
+              size="small"
+            >
               {{ row.removable ? $t('common.yes') : $t('common.no') }}
             </el-tag>
           </template>
@@ -36,12 +70,32 @@
       </el-table>
 
       <!-- Mount Points -->
-      <h3 class="section-title">{{ $t('disk.mounts') }}</h3>
-      <el-table :data="mounts" border stripe>
-        <el-table-column prop="device" :label="$t('disk.device')" />
-        <el-table-column prop="mount_point" :label="$t('disk.mountPoint')" />
-        <el-table-column prop="fs_type" :label="$t('disk.fsType')" width="120" />
-        <el-table-column prop="options" :label="$t('disk.options')" show-overflow-tooltip />
+      <h3 class="section-title">
+        {{ $t('disk.mounts') }}
+      </h3>
+      <el-table
+        :data="mounts"
+        border
+        stripe
+      >
+        <el-table-column
+          prop="device"
+          :label="$t('disk.device')"
+        />
+        <el-table-column
+          prop="mount_point"
+          :label="$t('disk.mountPoint')"
+        />
+        <el-table-column
+          prop="fs_type"
+          :label="$t('disk.fsType')"
+          width="120"
+        />
+        <el-table-column
+          prop="options"
+          :label="$t('disk.options')"
+          show-overflow-tooltip
+        />
       </el-table>
     </template>
   </div>

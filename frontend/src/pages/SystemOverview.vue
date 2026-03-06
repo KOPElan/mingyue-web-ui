@@ -8,7 +8,12 @@
           :active-text="$t('system.autoRefresh')"
           @change="(val: string | number | boolean) => toggleAutoRefresh(val as boolean)"
         />
-        <el-button type="primary" :icon="Refresh" @click="fetchData" :loading="loading">
+        <el-button
+          type="primary"
+          :icon="Refresh"
+          :loading="loading"
+          @click="fetchData"
+        >
           {{ $t('common.refresh') }}
         </el-button>
       </div>
@@ -25,37 +30,63 @@
     <template v-else>
       <el-row :gutter="16">
         <!-- CPU -->
-        <el-col :xs="24" :md="12">
-          <el-card shadow="hover" class="metric-card">
+        <el-col
+          :xs="24"
+          :md="12"
+        >
+          <el-card
+            shadow="hover"
+            class="metric-card"
+          >
             <template #header>
               <div class="card-header">
                 <el-icon><Cpu /></el-icon>
                 <span>{{ $t('system.cpu') }}</span>
               </div>
             </template>
-            <div v-if="overview" class="metric-display">
-              <div class="big-number">{{ overview.cpu_percent.toFixed(1) }}%</div>
+            <div
+              v-if="overview"
+              class="metric-display"
+            >
+              <div class="big-number">
+                {{ overview.cpu_percent.toFixed(1) }}%
+              </div>
               <el-progress
                 :percentage="overview.cpu_percent"
                 :color="getColorByPercent(overview.cpu_percent)"
                 :stroke-width="16"
               />
             </div>
-            <el-skeleton v-else animated :rows="2" />
+            <el-skeleton
+              v-else
+              animated
+              :rows="2"
+            />
           </el-card>
         </el-col>
 
         <!-- Memory -->
-        <el-col :xs="24" :md="12">
-          <el-card shadow="hover" class="metric-card">
+        <el-col
+          :xs="24"
+          :md="12"
+        >
+          <el-card
+            shadow="hover"
+            class="metric-card"
+          >
             <template #header>
               <div class="card-header">
                 <el-icon><DataBoard /></el-icon>
                 <span>{{ $t('system.memory') }}</span>
               </div>
             </template>
-            <div v-if="overview" class="metric-display">
-              <div class="big-number">{{ overview.mem_percent.toFixed(1) }}%</div>
+            <div
+              v-if="overview"
+              class="metric-display"
+            >
+              <div class="big-number">
+                {{ overview.mem_percent.toFixed(1) }}%
+              </div>
               <el-progress
                 :percentage="overview.mem_percent"
                 :color="getColorByPercent(overview.mem_percent)"
@@ -66,14 +97,25 @@
                 <span>{{ $t('system.total') }}: {{ formatBytes(overview.mem_total) }}</span>
               </div>
             </div>
-            <el-skeleton v-else animated :rows="2" />
+            <el-skeleton
+              v-else
+              animated
+              :rows="2"
+            />
           </el-card>
         </el-col>
       </el-row>
 
       <!-- Uptime Info -->
-      <el-card shadow="hover" class="mt-16" v-if="overview">
-        <el-descriptions :column="3" border>
+      <el-card
+        v-if="overview"
+        shadow="hover"
+        class="mt-16"
+      >
+        <el-descriptions
+          :column="3"
+          border
+        >
           <el-descriptions-item :label="$t('system.uptime')">
             {{ formatUptime(overview.uptime) }}
           </el-descriptions-item>

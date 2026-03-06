@@ -2,7 +2,12 @@
   <div class="share-manager">
     <div class="page-header">
       <h2>{{ $t('nav.shares') }}</h2>
-      <el-button type="primary" :icon="Refresh" @click="fetchData" :loading="loading">
+      <el-button
+        type="primary"
+        :icon="Refresh"
+        :loading="loading"
+        @click="fetchData"
+      >
         {{ $t('common.refresh') }}
       </el-button>
     </div>
@@ -17,15 +22,42 @@
 
     <template v-else>
       <!-- Samba Shares -->
-      <h3 class="section-title">{{ $t('share.samba') }}</h3>
-      <el-table :data="smbShares" v-loading="loading" border stripe class="mb-24">
-        <el-table-column prop="name" :label="$t('share.shareName')" />
-        <el-table-column prop="path" :label="$t('share.path')" />
-        <el-table-column prop="comment" :label="$t('share.comment')" show-overflow-tooltip />
-        <el-table-column prop="valid_users" :label="$t('share.validUsers')" />
-        <el-table-column :label="$t('share.readOnly')" width="100">
+      <h3 class="section-title">
+        {{ $t('share.samba') }}
+      </h3>
+      <el-table
+        v-loading="loading"
+        :data="smbShares"
+        border
+        stripe
+        class="mb-24"
+      >
+        <el-table-column
+          prop="name"
+          :label="$t('share.shareName')"
+        />
+        <el-table-column
+          prop="path"
+          :label="$t('share.path')"
+        />
+        <el-table-column
+          prop="comment"
+          :label="$t('share.comment')"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="valid_users"
+          :label="$t('share.validUsers')"
+        />
+        <el-table-column
+          :label="$t('share.readOnly')"
+          width="100"
+        >
           <template #default="{ row }">
-            <el-tag :type="row.read_only ? 'warning' : 'success'" size="small">
+            <el-tag
+              :type="row.read_only ? 'warning' : 'success'"
+              size="small"
+            >
               {{ row.read_only ? $t('common.yes') : $t('common.no') }}
             </el-tag>
           </template>
@@ -33,11 +65,27 @@
       </el-table>
 
       <!-- NFS Exports -->
-      <h3 class="section-title">{{ $t('share.nfs') }}</h3>
-      <el-table :data="nfsExports" border stripe>
-        <el-table-column prop="path" :label="$t('share.path')" />
-        <el-table-column prop="clients_spec" :label="$t('share.clientsSpec')" />
-        <el-table-column prop="options" :label="$t('share.options')" show-overflow-tooltip />
+      <h3 class="section-title">
+        {{ $t('share.nfs') }}
+      </h3>
+      <el-table
+        :data="nfsExports"
+        border
+        stripe
+      >
+        <el-table-column
+          prop="path"
+          :label="$t('share.path')"
+        />
+        <el-table-column
+          prop="clients_spec"
+          :label="$t('share.clientsSpec')"
+        />
+        <el-table-column
+          prop="options"
+          :label="$t('share.options')"
+          show-overflow-tooltip
+        />
       </el-table>
     </template>
   </div>

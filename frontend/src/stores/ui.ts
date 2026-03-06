@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 export type Theme = 'light' | 'dark' | 'auto'
 export type Language = 'zh-CN' | 'en-US'

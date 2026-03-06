@@ -1,15 +1,29 @@
 <template>
-  <el-dropdown @command="handleLangChange" trigger="click">
-    <el-button text :title="$t('ui.language')">
-      <el-icon size="18"><ChatDotSquare /></el-icon>
+  <el-dropdown
+    trigger="click"
+    @command="handleLangChange"
+  >
+    <el-button
+      text
+      :title="$t('ui.language')"
+    >
+      <el-icon size="18">
+        <ChatDotSquare />
+      </el-icon>
       <span class="lang-label">{{ uiStore.language === 'zh-CN' ? '中' : 'EN' }}</span>
     </el-button>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item command="zh-CN" :disabled="uiStore.language === 'zh-CN'">
+        <el-dropdown-item
+          command="zh-CN"
+          :disabled="uiStore.language === 'zh-CN'"
+        >
           🇨🇳 {{ $t('ui.chinese') }}
         </el-dropdown-item>
-        <el-dropdown-item command="en-US" :disabled="uiStore.language === 'en-US'">
+        <el-dropdown-item
+          command="en-US"
+          :disabled="uiStore.language === 'en-US'"
+        >
           🇺🇸 {{ $t('ui.english') }}
         </el-dropdown-item>
       </el-dropdown-menu>

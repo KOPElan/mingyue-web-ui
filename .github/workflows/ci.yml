@@ -57,7 +57,7 @@ jobs:
         run: npm install
 
       - name: Lint
-        run: npm run lint || true
+        run: npm run lint
 
       - name: Unit tests
         run: npm run test:unit
@@ -118,7 +118,7 @@ jobs:
         working-directory: frontend
         env:
           PLAYWRIGHT_BASE_URL: http://localhost:4173
-        run: npm run test:e2e || true
+        run: npm run test:e2e
 
       - name: Upload test results
         if: always()

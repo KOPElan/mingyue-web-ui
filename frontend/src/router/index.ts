@@ -85,6 +85,8 @@ router.beforeEach((to) => {
   if (to.name === 'Login' && sessionStore.isAuthenticated) {
     return { path: '/dashboard' }
   }
+  // Explicit fallthrough: allow navigation
+  return true
 })
 
 export default router

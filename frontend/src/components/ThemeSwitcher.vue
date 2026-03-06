@@ -1,6 +1,12 @@
 <template>
-  <el-dropdown @command="handleThemeChange" trigger="click">
-    <el-button text :title="$t('ui.theme')">
+  <el-dropdown
+    trigger="click"
+    @command="handleThemeChange"
+  >
+    <el-button
+      text
+      :title="$t('ui.theme')"
+    >
       <el-icon size="18">
         <Sunny v-if="uiStore.theme === 'light'" />
         <Moon v-else-if="uiStore.theme === 'dark'" />

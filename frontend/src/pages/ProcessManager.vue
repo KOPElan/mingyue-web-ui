@@ -10,7 +10,12 @@
           clearable
           style="width: 220px"
         />
-        <el-button type="primary" :icon="Refresh" @click="fetchData" :loading="loading">
+        <el-button
+          type="primary"
+          :icon="Refresh"
+          :loading="loading"
+          @click="fetchData"
+        >
           {{ $t('common.refresh') }}
         </el-button>
       </div>
@@ -26,33 +31,81 @@
 
     <el-table
       v-else
-      :data="filteredProcesses"
       v-loading="loading"
+      :data="filteredProcesses"
       border
       stripe
       :default-sort="{ prop: 'cpu_percent', order: 'descending' }"
       max-height="600"
     >
-      <el-table-column prop="pid" :label="$t('process.pid')" width="80" sortable />
-      <el-table-column prop="name" :label="$t('process.name')" min-width="150" sortable />
-      <el-table-column prop="status" :label="$t('process.status')" width="100">
+      <el-table-column
+        prop="pid"
+        :label="$t('process.pid')"
+        width="80"
+        sortable
+      />
+      <el-table-column
+        prop="name"
+        :label="$t('process.name')"
+        min-width="150"
+        sortable
+      />
+      <el-table-column
+        prop="status"
+        :label="$t('process.status')"
+        width="100"
+      >
         <template #default="{ row }">
-          <el-tag :type="row.status === 'running' ? 'success' : 'info'" size="small">
+          <el-tag
+            :type="row.status === 'running' ? 'success' : 'info'"
+            size="small"
+          >
             {{ row.status }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="cpu_percent" :label="$t('process.cpu')" width="100" sortable>
-        <template #default="{ row }">{{ row.cpu_percent.toFixed(1) }}%</template>
-      </el-table-column>
-      <el-table-column prop="mem_rss" :label="$t('process.memory')" width="130" sortable>
-        <template #default="{ row }">{{ formatBytes(row.mem_rss) }}</template>
-      </el-table-column>
-      <el-table-column prop="user" :label="$t('process.user')" width="100" />
-      <el-table-column prop="cmdline" :label="$t('process.cmdline')" min-width="200" show-overflow-tooltip />
-      <el-table-column :label="$t('common.actions')" width="100" fixed="right">
+      <el-table-column
+        prop="cpu_percent"
+        :label="$t('process.cpu')"
+        width="100"
+        sortable
+      >
         <template #default="{ row }">
-          <el-button size="small" type="danger" @click="confirmKill(row)">
+          {{ row.cpu_percent.toFixed(1) }}%
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="mem_rss"
+        :label="$t('process.memory')"
+        width="130"
+        sortable
+      >
+        <template #default="{ row }">
+          {{ formatBytes(row.mem_rss) }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="user"
+        :label="$t('process.user')"
+        width="100"
+      />
+      <el-table-column
+        prop="cmdline"
+        :label="$t('process.cmdline')"
+        min-width="200"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        :label="$t('common.actions')"
+        width="100"
+        fixed="right"
+      >
+        <template #default="{ row }">
+          <el-button
+            size="small"
+            type="danger"
+            @click="confirmKill(row)"
+          >
             {{ $t('process.kill') }}
           </el-button>
         </template>
