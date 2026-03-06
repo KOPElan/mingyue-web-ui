@@ -6,10 +6,15 @@ on:
   pull_request:
     branches: [main, master]
 
+permissions:
+  contents: read
+
 jobs:
   backend-proxy:
     name: Backend Proxy Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: backend-proxy
@@ -33,6 +38,8 @@ jobs:
   frontend:
     name: Frontend Build & Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: frontend
@@ -61,6 +68,8 @@ jobs:
   e2e:
     name: E2E Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [frontend, backend-proxy]
     steps:
       - uses: actions/checkout@v4

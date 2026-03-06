@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import rateLimit from 'express-rate-limit';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { config } from 'dotenv';
 
@@ -45,6 +46,22 @@ app.use(cors({
 
 app.use(express.json());
 
+// Rate limiting
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // limit each IP to 20 login attempts per window
+  message: { error: 'Too many login attempts, please try again later' },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 200, // limit each IP to 200 requests per minute
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
 // JWT Authentication middleware
 function authenticate(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -81,7 +98,7 @@ app.get('/health', (req, res) => {
 });
 
 // Auth routes
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', authLimiter, async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required' });
@@ -113,13 +130,13 @@ app.post('/api/auth/login', async (req, res) => {
   });
 });
 
-app.post('/api/auth/logout', authenticate, (req, res) => {
+app.post('/api/auth/logout', authLimiter, authenticate, (req, res) => {
   // JWT is stateless; client should discard token
   res.json({ message: 'Logged out successfully' });
 });
 
 // Agent management routes
-app.get('/api/agents', authenticate, (req, res) => {
+app.get('/api/agents', apiLimiter, authenticate, (req, res) => {
   const agentList = Array.from(agents.values()).map(a => ({
     id: a.id,
     name: a.name,
@@ -131,7 +148,7 @@ app.get('/api/agents', authenticate, (req, res) => {
   res.json(agentList);
 });
 
-app.post('/api/agents', authenticate, (req, res) => {
+app.post('/api/agents', apiLimiter, authenticate, (req, res) => {
   const { id, name, address, apiKey, status = 'offline', version = 'unknown' } = req.body;
   if (!id || !name || !address) {
     return res.status(400).json({ error: 'id, name, and address are required' });
@@ -144,7 +161,7 @@ app.post('/api/agents', authenticate, (req, res) => {
   res.status(201).json({ id, name, address, status, version });
 });
 
-app.put('/api/agents/:agentId', authenticate, (req, res) => {
+app.put('/api/agents/:agentId', apiLimiter, authenticate, (req, res) => {
   const { agentId } = req.params;
   if (!agents.has(agentId)) {
     return res.status(404).json({ error: `Agent '${agentId}' not found` });
@@ -164,7 +181,7 @@ app.put('/api/agents/:agentId', authenticate, (req, res) => {
   res.json(safeAgent);
 });
 
-app.delete('/api/agents/:agentId', authenticate, (req, res) => {
+app.delete('/api/agents/:agentId', apiLimiter, authenticate, (req, res) => {
   const { agentId } = req.params;
   if (!agents.has(agentId)) {
     return res.status(404).json({ error: `Agent '${agentId}' not found` });
@@ -174,7 +191,7 @@ app.delete('/api/agents/:agentId', authenticate, (req, res) => {
 });
 
 // Test agent connectivity
-app.get('/api/agents/:agentId/ping', authenticate, async (req, res) => {
+app.get('/api/agents/:agentId/ping', apiLimiter, authenticate, async (req, res) => {
   const { agentId } = req.params;
   const agent = agents.get(agentId);
   if (!agent) {
@@ -203,7 +220,7 @@ app.get('/api/agents/:agentId/ping', authenticate, async (req, res) => {
 });
 
 // Proxy routes: /proxy/:agentId/* → agent address
-app.use('/proxy/:agentId', authenticate, (req, res, next) => {
+app.use('/proxy/:agentId', apiLimiter, authenticate, (req, res, next) => {
   const { agentId } = req.params;
   const agent = agents.get(agentId);
 
