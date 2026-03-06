@@ -144,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, reactive, onMounted } from 'vue'
+  import { ref, reactive, computed, onMounted } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import type { FormInstance, FormRules } from 'element-plus'
   import { Plus } from '@element-plus/icons-vue'
@@ -167,11 +167,11 @@
     apiKey: ''
   })
 
-  const rules: FormRules = {
-    id: [{ required: true, message: 'Agent ID is required', trigger: 'blur' }],
-    name: [{ required: true, message: 'Name is required', trigger: 'blur' }],
-    address: [{ required: true, message: 'Address is required', trigger: 'blur' }]
-  }
+  const rules = computed<FormRules>(() => ({
+    id: [{ required: true, message: t('agent.idRequired'), trigger: 'blur' }],
+    name: [{ required: true, message: t('agent.nameRequired'), trigger: 'blur' }],
+    address: [{ required: true, message: t('agent.addressRequired'), trigger: 'blur' }]
+  }))
 
   onMounted(() => agentStore.fetchAgents())
 
@@ -231,13 +231,17 @@
   }
 
   async function confirmDelete(agent: Agent) {
-    await ElMessageBox.confirm(
-      t('agent.confirmDelete', { name: agent.name }),
-      t('agent.deleteAgent'),
-      { type: 'warning' }
-    )
-    await agentStore.deleteAgent(agent.id)
-    ElMessage.success(t('common.success'))
+    try {
+      await ElMessageBox.confirm(
+        t('agent.confirmDelete', { name: agent.name }),
+        t('agent.deleteAgent'),
+        { type: 'warning' }
+      )
+      await agentStore.deleteAgent(agent.id)
+      ElMessage.success(t('common.success'))
+    } catch {
+      // User cancelled or API error (API errors shown by http interceptor)
+    }
   }
 </script>
 

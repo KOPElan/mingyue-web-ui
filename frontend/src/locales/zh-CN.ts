@@ -80,7 +80,10 @@ export default {
     enterId: '唯一标识符，如 agent1',
     enterName: '请输入 Agent 名称',
     enterAddress: '请输入 Agent 地址，如 http://192.168.1.100:8080',
-    enterApiKey: '请输入 API Key（可选）'
+    enterApiKey: '请输入 API Key（可选）',
+    idRequired: 'Agent ID 不能为空',
+    nameRequired: '名称不能为空',
+    addressRequired: '地址不能为空'
   },
   system: {
     overview: '系统概览',

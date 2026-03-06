@@ -14,9 +14,8 @@ test.describe('UI Settings - Theme & Language', () => {
   })
 
   test('should display theme switcher in header', async ({ page }) => {
-    // Theme switcher button should be visible
-    const themeBtn = page.locator('.el-dropdown').filter({ hasText: '' }).first()
-    await expect(page.locator('.header-right')).toBeVisible()
+    const themeBtn = page.locator('.header-right')
+    await expect(themeBtn).toBeVisible()
   })
 
   test('should have language switcher in header', async ({ page }) => {

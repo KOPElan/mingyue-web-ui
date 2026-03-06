@@ -12,8 +12,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'mingyue-secret-change-me';
 
-// In-memory agent store
+// In-memory agent store.
+// NOTE: Agent data is stored in memory only. Any agents added or modified via the API
+// will be lost on service restart. Use the INITIAL_AGENTS environment variable to
+// persist agent configurations across restarts. In production, maintain INITIAL_AGENTS
+// in your deployment config (e.g., docker-compose env_file or Kubernetes Secret).
 const agents = new Map();
+
+// Proxy middleware cache: keyed by agentId. Invalidated when an agent is updated or deleted.
+const proxyCache = new Map();
 
 // Initialize agents from environment variable if provided
 if (process.env.INITIAL_AGENTS) {
@@ -58,7 +65,8 @@ const users = new Map([
 
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  // Default to localhost in development. Set CORS_ORIGIN to your production domain (e.g. https://example.com).
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -200,6 +208,8 @@ app.put('/api/agents/:agentId', apiLimiter, authenticate, (req, res) => {
     ...(version !== undefined && { version })
   };
   agents.set(agentId, updated);
+  // Invalidate proxy cache so the next request creates a fresh proxy with updated config
+  proxyCache.delete(agentId);
   const { apiKey: _key, ...safeAgent } = updated;
   res.json(safeAgent);
 });
@@ -210,6 +220,7 @@ app.delete('/api/agents/:agentId', apiLimiter, authenticate, (req, res) => {
     return res.status(404).json({ error: `Agent '${agentId}' not found` });
   }
   agents.delete(agentId);
+  proxyCache.delete(agentId);
   res.json({ message: `Agent '${agentId}' deleted` });
 });
 
@@ -248,34 +259,42 @@ app.use('/proxy/:agentId', apiLimiter, authenticate, (req, res, next) => {
   const agent = agents.get(agentId);
 
   if (!agent) {
-    return res.status(404).json({ error: `Agent '${agentId}' not found` });
+    return res.status(404).json({ error: `Agent not found` });
   }
 
-  // Create proxy middleware dynamically
-  const proxy = createProxyMiddleware({
-    target: agent.address,
-    changeOrigin: true,
-    pathRewrite: (path) => {
-      // Remove /proxy/:agentId prefix
-      return path.replace(new RegExp(`^/proxy/${agentId}`), '');
-    },
-    on: {
-      proxyReq: (proxyReq) => {
-        // Inject API key
-        if (agent.apiKey) {
-          proxyReq.setHeader('X-API-Key', agent.apiKey);
-        }
-        // Remove Authorization header to not expose JWT to agent
-        proxyReq.removeHeader('Authorization');
+  // Use cached proxy middleware; create a new one only if the target address has changed
+  let cached = proxyCache.get(agentId);
+  if (!cached || cached.address !== agent.address) {
+    const proxy = createProxyMiddleware({
+      target: agent.address,
+      changeOrigin: true,
+      pathRewrite: (path) => {
+        // Remove /proxy/:agentId prefix
+        return path.replace(new RegExp(`^/proxy/${agentId}`), '');
       },
-      error: (err, req, res) => {
-        console.error('Proxy error: agent unreachable');
-        res.status(502).json({ error: 'Bad Gateway: agent unreachable' });
+      on: {
+        proxyReq: (proxyReq) => {
+          // Always look up the current agent from the store so that apiKey updates
+          // (applied via the PUT endpoint, which also invalidates this cache entry)
+          // take effect immediately without needing to recreate the proxy middleware.
+          const currentAgent = agents.get(agentId);
+          if (currentAgent?.apiKey) {
+            proxyReq.setHeader('X-API-Key', currentAgent.apiKey);
+          }
+          // Remove Authorization header to not expose JWT to agent
+          proxyReq.removeHeader('Authorization');
+        },
+        error: (err, req, res) => {
+          console.error('Proxy error: agent unreachable');
+          res.status(502).json({ error: 'Bad Gateway: agent unreachable' });
+        }
       }
-    }
-  });
+    });
+    cached = { proxy, address: agent.address };
+    proxyCache.set(agentId, cached);
+  }
 
-  proxy(req, res, next);
+  cached.proxy(req, res, next);
 });
 
 // Start server

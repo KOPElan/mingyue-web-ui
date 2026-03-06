@@ -30,7 +30,7 @@
         :data="disks"
         border
         stripe
-        class="mb-16"
+        class="mb-24"
       >
         <el-table-column
           prop="name"
@@ -139,5 +139,5 @@
   .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
   .page-header h2 { margin: 0; font-size: 20px; font-weight: 600; }
   .section-title { font-size: 16px; font-weight: 600; margin: 0 0 12px; color: var(--el-text-color-primary); }
-  .mb-16 { margin-bottom: 24px; }
+  .mb-24 { margin-bottom: 24px; }
 </style>

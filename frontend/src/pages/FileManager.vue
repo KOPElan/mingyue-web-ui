@@ -244,16 +244,16 @@
   }
 
   async function confirmDelete(row: FileEntry) {
-    await ElMessageBox.confirm(t('file.confirmDelete', { name: row.name }), t('file.deleteFile'), { type: 'warning' })
-    const path = currentPath.value.endsWith('/')
-      ? `${currentPath.value}${row.name}`
-      : `${currentPath.value}/${row.name}`
     try {
+      await ElMessageBox.confirm(t('file.confirmDelete', { name: row.name }), t('file.deleteFile'), { type: 'warning' })
+      const path = currentPath.value.endsWith('/')
+        ? `${currentPath.value}${row.name}`
+        : `${currentPath.value}/${row.name}`
       await agentApi(agentStore.currentAgentId).deleteFile(path)
       ElMessage.success(t('common.success'))
       await loadFiles(currentPath.value)
     } catch {
-      // handled
+      // User cancelled or API error (API errors shown by http interceptor)
     }
   }
 

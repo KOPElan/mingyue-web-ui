@@ -1,6 +1,9 @@
 import axios from 'axios'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import router from '@/router'
+import { i18n } from '@/locales'
+
+const t = (key: string) => i18n.global.t(key)
 
 const http = axios.create({
   baseURL: '',
@@ -43,33 +46,33 @@ http.interceptors.response.use(
 
     if (status === 401) {
       _clearSession()
-      ElMessage.error('会话已过期，请重新登录')
+      ElMessage.error(t('auth.sessionExpired'))
       router.push('/login')
       return Promise.reject(error)
     }
 
     if (status === 403) {
-      ElMessage.error('权限不足，无法执行此操作')
+      ElMessage.error(t('auth.forbidden'))
       return Promise.reject(error)
     }
 
     if (status === 404) {
-      ElMessageBox.alert(`资源未找到: ${message}`, '404 Not Found', { type: 'warning' })
+      ElMessageBox.alert(`${t('error.notFound')}: ${message}`, '404 Not Found', { type: 'warning' })
       return Promise.reject(error)
     }
 
     if (status === 409) {
-      ElMessageBox.alert(`资源冲突: ${message}`, '409 Conflict', { type: 'warning' })
+      ElMessageBox.alert(`${t('error.conflict')}: ${message}`, '409 Conflict', { type: 'warning' })
       return Promise.reject(error)
     }
 
     if (status && status >= 500) {
-      ElMessageBox.alert(`服务器错误: ${message}`, '服务器错误', { type: 'error' })
+      ElMessageBox.alert(`${t('error.serverError')}: ${message}`, t('error.serverError'), { type: 'error' })
       return Promise.reject(error)
     }
 
     if (!status) {
-      ElMessage.error('网络错误，请检查连接')
+      ElMessage.error(t('error.networkError'))
     }
 
     return Promise.reject(error)

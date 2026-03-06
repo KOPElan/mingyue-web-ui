@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { handleApiError, formatBytes, formatUptime } from '@/utils/error'
+import { formatBytes, formatUptime } from '@/utils/error'
 
 describe('formatBytes', () => {
   it('should format 0 bytes', () => {

@@ -151,17 +151,17 @@
   }
 
   async function confirmKill(proc: Process) {
-    await ElMessageBox.confirm(
-      t('process.confirmKill', { name: proc.name, pid: proc.pid }),
-      t('process.kill'),
-      { type: 'warning' }
-    )
     try {
+      await ElMessageBox.confirm(
+        t('process.confirmKill', { name: proc.name, pid: proc.pid }),
+        t('process.kill'),
+        { type: 'warning' }
+      )
       await agentApi(agentStore.currentAgentId).killProcess(proc.pid)
       ElMessage.success(t('process.killSuccess'))
       await fetchData()
     } catch {
-      ElMessage.error(t('process.killFailed'))
+      // User cancelled or API error (API errors shown by http interceptor)
     }
   }
 

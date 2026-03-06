@@ -80,7 +80,10 @@ export default {
     enterId: 'Unique identifier, e.g. agent1',
     enterName: 'Enter agent name',
     enterAddress: 'Enter agent address, e.g. http://192.168.1.100:8080',
-    enterApiKey: 'Enter API Key (optional)'
+    enterApiKey: 'Enter API Key (optional)',
+    idRequired: 'Agent ID is required',
+    nameRequired: 'Name is required',
+    addressRequired: 'Address is required'
   },
   system: {
     overview: 'System Overview',

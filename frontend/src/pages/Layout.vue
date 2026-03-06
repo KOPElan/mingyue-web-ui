@@ -127,6 +127,7 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
   import { ElMessage } from 'element-plus'
   import { UserFilled } from '@element-plus/icons-vue'
   import { useSessionStore } from '@/stores/session'
@@ -134,6 +135,7 @@
   import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
   import LangSwitcher from '@/components/LangSwitcher.vue'
 
+  const { t } = useI18n()
   const route = useRoute()
   const router = useRouter()
   const sessionStore = useSessionStore()
@@ -148,7 +150,7 @@
   async function handleCommand(cmd: string) {
     if (cmd === 'logout') {
       await sessionStore.logout()
-      ElMessage.success('已退出登录')
+      ElMessage.success(t('auth.logoutSuccess'))
       router.push('/login')
     }
   }

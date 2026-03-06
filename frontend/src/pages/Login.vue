@@ -104,7 +104,9 @@
     try {
       await sessionStore.login(form.username, form.password)
       ElMessage.success(t('auth.loginSuccess'))
-      const redirect = (route.query.redirect as string) || '/dashboard'
+      const rawRedirect = (route.query.redirect as string) || '/dashboard'
+      // Prevent open redirect: only allow internal paths (must start with '/' but not '//')
+      const redirect = /^\/(?!\/)/.test(rawRedirect) ? rawRedirect : '/dashboard'
       router.push(redirect)
     } catch (error: unknown) {
       const err = error as { response?: { data?: { error?: string } } }
