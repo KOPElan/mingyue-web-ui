@@ -6,7 +6,7 @@
         <el-switch
           v-model="autoRefresh"
           :active-text="$t('system.autoRefresh')"
-          @change="(val: string | number | boolean) => toggleAutoRefresh(val as boolean)"
+          @change="toggleAutoRefresh"
         />
         <el-button
           type="primary"
@@ -142,7 +142,7 @@
   const agentStore = useAgentStore()
   const overview = ref<SystemOverview | null>(null)
   const loading = ref(false)
-  const autoRefresh = ref(false)
+  const autoRefresh = ref<boolean>(false)
   let refreshTimer: ReturnType<typeof setInterval> | null = null
 
   async function fetchData() {
@@ -158,8 +158,9 @@
     }
   }
 
-  function toggleAutoRefresh(val: boolean) {
-    if (val) {
+  function toggleAutoRefresh(val: string | number | boolean) {
+    const enabled = val === true
+    if (enabled) {
       refreshTimer = setInterval(fetchData, 5000)
     } else {
       if (refreshTimer) clearInterval(refreshTimer)

@@ -39,7 +39,7 @@ if (process.env.INITIAL_AGENTS) {
           version: typeof agent.version === 'string' ? agent.version : 'unknown'
         });
       } else {
-        console.warn('Skipping invalid agent entry (missing/invalid id, name, or address):', JSON.stringify({ id: agent.id, name: agent.name }));
+        console.warn('Skipping invalid agent entry (missing/invalid id, name, or address).');
       }
     }
     console.log(`Loaded ${agents.size} agents from INITIAL_AGENTS`);
@@ -151,7 +151,10 @@ app.post('/api/auth/login', authLimiter, async (req, res) => {
 });
 
 app.post('/api/auth/logout', authLimiter, authenticate, (req, res) => {
-  // JWT is stateless; client should discard token
+  // JWT is stateless; the token cannot be server-side invalidated.
+  // The authenticate middleware is kept here to ensure only valid-token holders
+  // can trigger this endpoint, avoiding unnecessary processing for anonymous requests.
+  // The client must discard the token upon receiving this response.
   res.json({ message: 'Logged out successfully' });
 });
 
@@ -266,8 +269,8 @@ app.use('/proxy/:agentId', apiLimiter, authenticate, (req, res, next) => {
         proxyReq.removeHeader('Authorization');
       },
       error: (err, req, res) => {
-        console.error(`Proxy error for agent ${agentId}:`, err.message);
-        res.status(502).json({ error: 'Bad Gateway: agent unreachable', agentId });
+        console.error('Proxy error: agent unreachable');
+        res.status(502).json({ error: 'Bad Gateway: agent unreachable' });
       }
     }
   });
