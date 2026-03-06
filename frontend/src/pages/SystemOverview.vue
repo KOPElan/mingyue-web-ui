@@ -6,7 +6,7 @@
         <el-switch
           v-model="autoRefresh"
           :active-text="$t('system.autoRefresh')"
-          @change="toggleAutoRefresh"
+          @change="(val: string | number | boolean) => toggleAutoRefresh(val as boolean)"
         />
         <el-button type="primary" :icon="Refresh" @click="fetchData" :loading="loading">
           {{ $t('common.refresh') }}

@@ -8,14 +8,15 @@
 
 <script setup lang="ts">
   import { computed, watch } from 'vue'
+  import type { Language } from 'element-plus/es/locale'
   import zhCn from 'element-plus/es/locale/lang/zh-cn'
   import en from 'element-plus/es/locale/lang/en'
   import { useUiStore } from '@/stores/ui'
 
   const uiStore = useUiStore()
 
-  const elLocale = computed(() => {
-    return uiStore.language === 'zh-CN' ? zhCn : en
+  const elLocale = computed((): Language => {
+    return (uiStore.language === 'zh-CN' ? zhCn : en) as unknown as Language
   })
 
   const themeClass = computed(() => {
