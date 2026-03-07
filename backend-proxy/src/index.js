@@ -10,6 +10,10 @@ config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// 信任第一层代理（例如 nginx），使 express-rate-limit 能够通过
+// 反向代理添加的 X-Forwarded-For 头部正确识别客户端 IP。
+app.set('trust proxy', 1);
 const JWT_SECRET = process.env.JWT_SECRET || 'mingyue-secret-change-me';
 
 // In-memory agent store.
