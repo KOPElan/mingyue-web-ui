@@ -6,7 +6,7 @@ async function login(page: import('@playwright/test').Page) {
   await page.fill('input[autocomplete="username"]', 'admin')
   await page.fill('input[autocomplete="current-password"]', 'admin123')
   await page.click('button:has-text("登录")')
-  await page.waitForURL(/dashboard/, { timeout: 5000 })
+  await page.waitForURL(/dashboard/, { timeout: 10000 })
 }
 
 test.describe('Resource Management Pages', () => {

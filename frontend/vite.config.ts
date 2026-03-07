@@ -36,6 +36,21 @@ export default defineConfig({
       }
     }
   },
+  preview: {
+    // 4173 is Vite's default preview port; kept explicit so it matches
+    // the CI workflow's health-check and PLAYWRIGHT_BASE_URL.
+    port: 4173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+      },
+      '/proxy': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+      }
+    }
+  },
   build: {
     outDir: 'dist',
     sourcemap: false,

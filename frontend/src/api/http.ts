@@ -45,9 +45,15 @@ http.interceptors.response.use(
     const message = error.response?.data?.error || error.message
 
     if (status === 401) {
-      _clearSession()
-      ElMessage.error(t('auth.sessionExpired'))
-      router.push('/login')
+      // Only treat as session expiry when the user was already authenticated
+      // (i.e. a token was sent but the server rejected it as expired/invalid).
+      // If there is no current token, the 401 came from the login endpoint
+      // (invalid credentials); let the caller handle the error message.
+      if (_tokenGetter()) {
+        _clearSession()
+        ElMessage.error(t('auth.sessionExpired'))
+        router.push('/login')
+      }
       return Promise.reject(error)
     }
 
