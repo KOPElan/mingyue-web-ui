@@ -5,7 +5,8 @@ async function login(page: import('@playwright/test').Page) {
   await page.goto('/login')
   await page.fill('input[autocomplete="username"]', 'admin')
   await page.fill('input[autocomplete="current-password"]', 'admin123')
-  await page.click('button:has-text("登录")')
+  // Use class selector so it works regardless of the active language
+  await page.locator('.login-btn').click()
   await page.waitForURL(/dashboard/, { timeout: 10000 })
 }
 
@@ -57,7 +58,10 @@ test.describe('Resource Management Pages', () => {
   })
 
   test('agent manager should show add agent button', async ({ page }) => {
-    await page.goto('/agents')
-    await expect(page.locator('button:has-text("添加 Agent")')).toBeVisible()
+    // Navigate via sidebar (client-side navigation) to keep the JWT in memory
+    await page.click('text=Agent 管理')
+    await expect(page).toHaveURL(/agents/)
+    // Use class selector to be language-independent
+    await expect(page.locator('.add-agent-btn')).toBeVisible()
   })
 })

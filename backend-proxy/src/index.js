@@ -77,7 +77,9 @@ app.use(express.json());
 // Rate limiting
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // limit each IP to 20 login attempts per window
+  // Allow overriding via env var so CI/test environments can raise the limit
+  // without disabling it entirely. Default is 20 for production.
+  max: parseInt(process.env.RATE_LIMIT_AUTH_MAX || '20', 10),
   message: { error: 'Too many login attempts, please try again later' },
   standardHeaders: true,
   legacyHeaders: false

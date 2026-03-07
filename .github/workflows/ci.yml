@@ -93,7 +93,11 @@ jobs:
 
       - name: Start backend proxy
         working-directory: backend-proxy
+        # Raise auth rate limit so all E2E login calls stay within the window.
+        # Default (20/15 min) is too low for CI with multiple test retries.
         run: node src/index.js &
+        env:
+          RATE_LIMIT_AUTH_MAX: '200'
 
       - name: Build frontend
         working-directory: frontend

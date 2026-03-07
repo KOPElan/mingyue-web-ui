@@ -4,7 +4,8 @@ async function login(page: import('@playwright/test').Page) {
   await page.goto('/login')
   await page.fill('input[autocomplete="username"]', 'admin')
   await page.fill('input[autocomplete="current-password"]', 'admin123')
-  await page.click('button:has-text("登录")')
+  // Use class selector so it works regardless of the active language
+  await page.locator('.login-btn').click()
   await page.waitForURL(/dashboard/, { timeout: 10000 })
 }
 

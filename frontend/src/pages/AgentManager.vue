@@ -4,6 +4,7 @@
       <h2>{{ $t('nav.agents') }}</h2>
       <el-button
         type="primary"
+        class="add-agent-btn"
         :icon="Plus"
         @click="openAddDialog"
       >
